@@ -1,10 +1,10 @@
 # Dependencies
 node_modules
-db/app.db
-db/test.db
+database/app.db
+database/test.db
 
 # Database
-db/*.db
+database/*.db
 
 # Environment
 .env

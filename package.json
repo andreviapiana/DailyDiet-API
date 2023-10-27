@@ -13,9 +13,12 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.1.0",
     "@types/node": "^20.8.9",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "tsx": "^3.12.2"
   },
   "dependencies": {
-    "fastify": "^4.24.3"
+    "fastify": "^4.24.3",
+    "knex": "^3.0.1",
+    "sqlite3": "^5.1.6"
   }
 }
