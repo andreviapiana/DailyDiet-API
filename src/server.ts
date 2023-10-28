@@ -1,24 +1,12 @@
 import fastify from 'fastify'
-import { knex } from './database'
-import crypto from 'node:crypto'
 import { env } from './env'
+import { usersRoutes } from './routes/users'
 
 const app = fastify()
 
-app.get('/hello', async () => {
-  const user = await knex('users')
-    .insert({
-      id: crypto.randomUUID(),
-      name: 'André',
-      email: 1000,
-      address: 'Endereço de Teste',
-      weight: 750.15,
-      height: 180,
-    })
-    .returning('*')
-
-  return user
-})
+// Registrando plugins - rotas //
+// O segundo parâmetro é o prefix -> que é o prefixo da url para ativar //
+app.register(usersRoutes, { prefix: 'users' })
 
 app
   .listen({
