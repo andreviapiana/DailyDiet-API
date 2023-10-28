@@ -4,6 +4,29 @@ import crypto from 'node:crypto'
 import { z } from 'zod'
 
 export async function mealsRoutes(app: FastifyInstance) {
+  // Listando todas refeições //
+  app.get('/', async () => {
+    const meals = await knex('meals').select()
+
+    return { meals }
+  })
+
+  // Listando refeições pelo ID //
+  app.get('/:id', async (request) => {
+    const getMealsParamsSchema = z.object({
+      id: z.string().uuid(),
+    })
+
+    const { id } = getMealsParamsSchema.parse(request.params)
+
+    const meal = await knex('meals').where('id', id).first()
+
+    return {
+      meal,
+    }
+  })
+
+  // Criando Refeição //
   app.post('/', async (request, response) => {
     const createMealBodySchema = z.object({
       name: z.string(),
