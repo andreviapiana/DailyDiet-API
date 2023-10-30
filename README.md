@@ -40,7 +40,7 @@ ___
 
 ## 🚀 Regras da Aplicação
 
-# RF
+#### RF
 
 - [x] Deve ser possível criar um usuário;
 - [x] O usuário deve poder criar uma nova refeição, com esses dados:
@@ -52,7 +52,7 @@ ___
 - [x] O usuário deve poder listar todas as refeições que criou;
 - [x] O usuário deve poder apagar uma refeição que criou;
 
-# RN
+#### RN
 
 - [x] Deve ser possível identificarmos o usuário entre as requisições;
 - [x] Deve ser possível visualizar uma única refeição pelo ID;
