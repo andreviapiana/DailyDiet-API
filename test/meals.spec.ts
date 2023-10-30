@@ -163,7 +163,7 @@ describe('Meals routes', () => {
 
     const userId = await knex('users').select('id').where({ email })
 
-    // Criando 3 registros de refeição
+    // Criando 3 registros de refeição //
     await supertestRequest(app.server)
       .post('/meals')
       .send({
@@ -199,11 +199,50 @@ describe('Meals routes', () => {
       .set('Cookie', cookies)
       .expect(200)
 
-    // Buscando do retorno os valores de dentro do objeto summary
+    // Buscando do retorno os valores de dentro do objeto summary //
     expect(summaryResponse.body.summary).toEqual({
       'Total de refeições registradas': 3,
       'Total de refeições dentro da dieta': 1,
       'Total de refeições fora da dieta': 2,
     })
   })
+
+it('should be able to delete a specific meal', async () => {
+  const createUserResponse = await supertestRequest(app.server)
+    .post('/users')
+    .send({
+      name,
+      email,
+      address,
+      weight,
+      height,
+    })
+
+  const cookies = createUserResponse.get('Set-Cookie')
+
+  const userId = await knex('users').select('id').where({ email })
+
+  await supertestRequest(app.server)
+    .post('/meals')
+    .send({
+      user_id: userId,
+      name: 'Refeição de Teste',
+      description: 'Teste',
+      isOnTheDiet: false,
+    })
+    .set('Cookie', cookies)
+
+  const listMealsResponse = await supertestRequest(app.server)
+    .get('/meals')
+    .set('Cookie', cookies)
+    .expect(200)
+
+  // Recuperando o id da refeição //
+  const mealId = listMealsResponse.body.meals[0].id
+
+  await supertestRequest(app.server)
+    .delete(`/meals/${mealId}`)
+    .set('Cookie', cookies)
+    .expect(202)
+})
 })
