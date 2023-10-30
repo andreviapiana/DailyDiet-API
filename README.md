@@ -42,22 +42,22 @@ ___
 
 # RF
 
-- [ X ] Deve ser possível criar um usuário;
-- [ X ] O usuário deve poder criar uma nova refeição, com esses dados:
+- [x] Deve ser possível criar um usuário;
+- [x] O usuário deve poder criar uma nova refeição, com esses dados:
     - Nome
     - Descrição
     - Data e Hora (criado automaticamente)
     - Está dentro ou não da Dieta
-- [ X ] O usuário deve poder editar uma refeição podendo alterar todos os dados acima;
-- [ X ] O usuário deve poder listar todas as refeições que criou;
-- [ X ] O usuário deve poder apagar uma refeição que criou;
+- [x] O usuário deve poder editar uma refeição podendo alterar todos os dados acima;
+- [x] O usuário deve poder listar todas as refeições que criou;
+- [x] O usuário deve poder apagar uma refeição que criou;
 
 # RN
 
-- [ X ] Deve ser possível identificarmos o usuário entre as requisições;
-- [ X ] Deve ser possível visualizar uma única refeição pelo ID;
-- [ X ] O usuário só pode visualizar, editar ou apagar as refeições que ele criou;
-- [ X ] Deve ser possível recuperar as métricas de um usuário:
+- [x] Deve ser possível identificarmos o usuário entre as requisições;
+- [x] Deve ser possível visualizar uma única refeição pelo ID;
+- [x] O usuário só pode visualizar, editar ou apagar as refeições que ele criou;
+- [x] Deve ser possível recuperar as métricas de um usuário:
     - Quantidade de refeições
     - Quantidade dentro da dieta
     - Quantidade fora da dieta
@@ -92,7 +92,7 @@ $ npm run knex -- migrate:latest
 
 ___
 
-#### 📇 Insomnia da API
+## 📇 Insomnia da API
 
 Instale o [Insomnia](https://insomnia.rest/download), e então clique no botão a seguir para abrir as requisições já configuradas.
 
@@ -100,7 +100,7 @@ Instale o [Insomnia](https://insomnia.rest/download), e então clique no botão 
 
 ___
 
-#### 🔀 Rotas da API
+## 🔀 Rotas da API
 
 - Criar Novo Usuário
 ```bash
@@ -135,6 +135,23 @@ DELETE /meals/:${meal_id}
 - Editar uma Refeição
 ```bash
 PUT /meals/:${meal_id}
+```
+
+___
+
+## 📚 Testes automatizados e2e
+  - [x] Should be able to create a new account
+  - [x] Should be able to create a new meal
+  - [x] Should be able to list all meals
+  - [x] Should be able to get a specific meals
+  - [x] Should be able to get the summary meals
+  - [x] Should be able to delete a specific meal
+  - [x] Should be able to edit a meal
+
+
+```bash
+# Após a instalação do projeto e suas depêndencias:
+  npm run test
 ```
 
 ___
