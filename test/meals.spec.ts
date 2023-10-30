@@ -207,42 +207,87 @@ describe('Meals routes', () => {
     })
   })
 
-it('should be able to delete a specific meal', async () => {
-  const createUserResponse = await supertestRequest(app.server)
-    .post('/users')
-    .send({
-      name,
-      email,
-      address,
-      weight,
-      height,
-    })
+  it('Should be able to edit a meal', async () => {
+    const createUserResponse = await supertestRequest(app.server)
+      .post('/users')
+      .send({
+        name,
+        email,
+        address,
+        weight,
+        height,
+      })
 
-  const cookies = createUserResponse.get('Set-Cookie')
+    const cookies = createUserResponse.get('Set-Cookie')
 
-  const userId = await knex('users').select('id').where({ email })
+    const userId = await knex('users').select('id').where({ email })
 
-  await supertestRequest(app.server)
-    .post('/meals')
-    .send({
-      user_id: userId,
-      name: 'Refeição de Teste',
-      description: 'Teste',
-      isOnTheDiet: false,
-    })
-    .set('Cookie', cookies)
+    await supertestRequest(app.server)
+      .post('/meals')
+      .send({
+        user_id: userId,
+        name: 'Refeição de Teste',
+        description: 'Teste',
+        isOnTheDiet: false,
+      })
+      .set('Cookie', cookies)
 
-  const listMealsResponse = await supertestRequest(app.server)
-    .get('/meals')
-    .set('Cookie', cookies)
-    .expect(200)
+    const listMealsResponse = await supertestRequest(app.server)
+      .get('/meals')
+      .set('Cookie', cookies)
+      .expect(200)
 
-  // Recuperando o id da refeição //
-  const mealId = listMealsResponse.body.meals[0].id
+    // Recuperando o id da refeição //
+    const mealId = listMealsResponse.body.meals[0].id
 
-  await supertestRequest(app.server)
-    .delete(`/meals/${mealId}`)
-    .set('Cookie', cookies)
-    .expect(202)
-})
+    await supertestRequest(app.server)
+      .put(`/meals/${mealId}`)
+      .set('Cookie', cookies)
+      .send({
+        user_id: userId,
+        name: 'Refeição de Teste - EDITADA',
+        description: 'Teste - EDITADO',
+        isOnTheDiet: true,
+      })
+      .expect(202)
+  })
+
+  it('should be able to delete a specific meal', async () => {
+    const createUserResponse = await supertestRequest(app.server)
+      .post('/users')
+      .send({
+        name,
+        email,
+        address,
+        weight,
+        height,
+      })
+
+    const cookies = createUserResponse.get('Set-Cookie')
+
+    const userId = await knex('users').select('id').where({ email })
+
+    await supertestRequest(app.server)
+      .post('/meals')
+      .send({
+        user_id: userId,
+        name: 'Refeição de Teste',
+        description: 'Teste',
+        isOnTheDiet: false,
+      })
+      .set('Cookie', cookies)
+
+    const listMealsResponse = await supertestRequest(app.server)
+      .get('/meals')
+      .set('Cookie', cookies)
+      .expect(200)
+
+    // Recuperando o id da refeição //
+    const mealId = listMealsResponse.body.meals[0].id
+
+    await supertestRequest(app.server)
+      .delete(`/meals/${mealId}`)
+      .set('Cookie', cookies)
+      .expect(202)
+  })
 })
