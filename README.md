@@ -8,7 +8,7 @@
     - Está dentro ou não da Dieta
 - [ ] O usuário deve poder editar uma refeição podendo alterar todos os dados acima;
 - [ X ] O usuário deve poder listar todas as refeições que criou;
-- [ ] O usuário deve poder apagar uma refeição que criou;
+- [ X ] O usuário deve poder apagar uma refeição que criou;
 
 # RN
 

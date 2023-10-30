@@ -150,4 +150,40 @@ export async function mealsRoutes(app: FastifyInstance) {
 
     return response.status(201).send()
   })
+
+  // Apagando uma Refeição //
+  app.delete(
+    '/:id',
+    { preHandler: [checkSessionIdExists] },
+    async (request, response) => {
+      const getMealParamsSchema = z.object({
+        id: z.string().uuid(),
+      })
+
+      const params = getMealParamsSchema.parse(request.params)
+
+      // Buscando o usuário //
+      const { sessionId } = request.cookies
+
+      const [user] = await knex('users')
+        .where('session_id', sessionId)
+        .select('id')
+
+      const userId = user.id
+
+      const meal = await knex('meals')
+        .where('id', params.id)
+        .andWhere('user_id', userId)
+        .first()
+        .delete()
+
+      if (!meal) {
+        return response.status(401).send({
+          error: 'Unauthorized',
+        })
+      }
+
+      return response.status(202).send('Refeição deletada com sucesso')
+    },
+  )
 }
