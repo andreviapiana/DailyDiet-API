@@ -147,4 +147,63 @@ describe('Meals routes', () => {
       }),
     )
   })
+
+  it('should be able to get the summary meals', async () => {
+    const createUserResponse = await supertestRequest(app.server)
+      .post('/users')
+      .send({
+        name,
+        email,
+        address,
+        weight,
+        height,
+      })
+
+    const cookies = createUserResponse.get('Set-Cookie')
+
+    const userId = await knex('users').select('id').where({ email })
+
+    // Criando 3 registros de refeição
+    await supertestRequest(app.server)
+      .post('/meals')
+      .send({
+        user_id: userId,
+        name: 'Refeição de Teste 1',
+        description: 'Teste',
+        isOnTheDiet: false,
+      })
+      .set('Cookie', cookies)
+
+    await supertestRequest(app.server)
+      .post('/meals')
+      .send({
+        user_id: userId,
+        name: 'Refeição de Teste 2',
+        description: 'Teste',
+        isOnTheDiet: true,
+      })
+      .set('Cookie', cookies)
+
+    await supertestRequest(app.server)
+      .post('/meals')
+      .send({
+        user_id: userId,
+        name: 'Refeição de Teste 3',
+        description: 'Teste',
+        isOnTheDiet: false,
+      })
+      .set('Cookie', cookies)
+
+    const summaryResponse = await supertestRequest(app.server)
+      .get('/meals/summary')
+      .set('Cookie', cookies)
+      .expect(200)
+
+    // Buscando do retorno os valores de dentro do objeto summary
+    expect(summaryResponse.body.summary).toEqual({
+      'Total de refeições registradas': 3,
+      'Total de refeições dentro da dieta': 1,
+      'Total de refeições fora da dieta': 2,
+    })
+  })
 })
