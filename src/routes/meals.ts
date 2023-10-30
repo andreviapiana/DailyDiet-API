@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { knex } from '../database'
-import crypto from 'node:crypto'
+import crypto, { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 
 export async function mealsRoutes(app: FastifyInstance) {
@@ -38,9 +38,25 @@ export async function mealsRoutes(app: FastifyInstance) {
       request.body,
     )
 
+    // Só vai liberar a criação da refeição se existir o Cookie //
+    const sessionId = request.cookies.sessionId
+
+    if (!sessionId) {
+      return response.status(401).send({
+        error: 'Unauthorized',
+      })
+    }
+
+    // A partir deste sessionID, buscar os dados na tabela users para adicionar durante a criação de uma nova refeição na tabela meals //
+    const [user] = await knex('users')
+      .where('session_id', sessionId)
+      .select('id')
+
+    const userId = user.id
+
     await knex('meals').insert({
       id: crypto.randomUUID(),
-      user_id: crypto.randomUUID(), // gerando um id aleatório de user por enquanto
+      user_id: userId,
       name,
       description,
       isOnTheDiet,

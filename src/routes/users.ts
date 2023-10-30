@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { knex } from '../database'
-import crypto from 'node:crypto'
+import crypto, { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 
 // Plugin SEMPRE deve ser Async //
@@ -22,10 +22,27 @@ export async function usersRoutes(app: FastifyInstance) {
 
     // Conferindo se o email já está cadastrado //
     // Selecionando todas as colunas ('*') da tabela de usuários ('from("users")') onde a coluna "email" é igual ao valor da variável "email" ('where({ email })') //
-    const checkUserExist = await knex.select('*').from('users').where({ email })
+    const checkUserExist = await knex
+      .select('*')
+      .from('users')
+      .where('email', email)
+      .first()
 
-    if (checkUserExist.length > 0) {
+    if (checkUserExist) {
       throw new Error('Este email já está vinculado à um usuário')
+    }
+
+    // Verificando se já existe uma sessionID //
+    let sessionId = request.cookies.sessionId
+
+    // Caso não exista, criar uma //
+    if (!sessionId) {
+      sessionId = randomUUID()
+
+      response.cookie('sessionId', sessionId, {
+        path: '/meals', // apenas as rotas /meals podem acessar o cookie //
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      })
     }
 
     await knex('users').insert({
@@ -35,6 +52,7 @@ export async function usersRoutes(app: FastifyInstance) {
       address,
       weight,
       height,
+      session_id: sessionId,
     })
 
     return response.status(201).send()
