@@ -101,4 +101,50 @@ describe('Meals routes', () => {
       }),
     ])
   })
+
+  it('should be able to get a specific meal by ID', async () => {
+    const createUserResponse = await supertestRequest(app.server)
+      .post('/users')
+      .send({
+        name,
+        email,
+        address,
+        weight,
+        height,
+      })
+
+    const cookies = createUserResponse.get('Set-Cookie')
+
+    const userId = await knex('users').select('id').where({ email })
+
+    await supertestRequest(app.server)
+      .post('/meals')
+      .send({
+        user_id: userId,
+        name: 'Refeição de Teste',
+        description: 'Teste',
+        isOnTheDiet: false,
+      })
+      .set('Cookie', cookies) // enviando os cookies no cabeçalho da requisição //
+
+    const listMealsResponse = await supertestRequest(app.server)
+      .get('/meals')
+      .set('Cookie', cookies) // enviando os cookies no cabeçalho da requisição //
+      .expect(200)
+
+    // Recuperando o ID da refeição //
+    const mealId = listMealsResponse.body.meals[0].id
+
+    const getMealResponse = await supertestRequest(app.server)
+      .get(`/meals/${mealId}`)
+      .set('Cookie', cookies) // enviando os cookies no cabeçalho da requisição //
+      .expect(200)
+
+    expect(getMealResponse.body.meal).toEqual(
+      expect.objectContaining({
+        name: 'Refeição de Teste',
+        description: 'Teste',
+      }),
+    )
+  })
 })
