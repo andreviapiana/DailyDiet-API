@@ -95,8 +95,9 @@ ___
 ## 📇 Insomnia da API
 
 Instale o [Insomnia](https://insomnia.rest/download), e então clique no botão a seguir para abrir as requisições já configuradas.
+Ao fazer a primeira requisição pode ser que o tempo limite seja atingido, pois o servidor gratuito pode demorar 1 minuto para startar.
 
-[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=DailyDiet-API&uri=https%3A%2F%2Fraw.githubusercontent.com%2FAndreViapiana%2FDailyDiet-API%2Fmain%2Fexport.json)
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=DailyDiet-API&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fandreviapiana%2FDailyDiet-API%2Fmaster%2Fexport.json)
 
 ___
 
